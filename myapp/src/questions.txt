@@ -1,0 +1,1 @@
+Q. Is there any benefit of having a user + admin login. Would the system deviate from the security standard if the Rack information was public. 
