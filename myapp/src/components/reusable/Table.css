@@ -1,0 +1,11 @@
+td,th{
+    border: 1px solid rgb(9, 2, 2);
+    
+    border-right: 0px;
+    
+}
+
+
+/* .table-fixed tr {
+    height: 100px; 
+  } */
