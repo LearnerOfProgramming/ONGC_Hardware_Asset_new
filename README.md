@@ -67,10 +67,38 @@ The MongoDB schema for this project is organized into the following models:
    ```bash
    npm run start
 
-Usage
+## Usage
 
     Access the frontend at http://localhost:3000
     Backend server runs on http://localhost:5000
+
+## Major Version Release Summary
+
+### v1.0 (Current)
+- **First Prototype**: This version includes a complete end-to-end lifecycle of components.
+  - **Features**:
+    - New components can be added to a specific Data Center and Rack.
+    - Complete details of each component are available and can be modified by Admins.
+    - A naive login system is in place with minimal security.
+  - **Limitations**:
+    - No Contract Management is included.
+
+### v1.1 (60% Complete) - Beta Release
+- **In Progress**: This version focuses on improving database performance and introducing contract management.
+  - **Features**:
+    - Database Optimizations.
+    - End-to-end Contract Management.
+    - Centralized, secure login system.
+  - **Timeline**: Expected release in 2 weeks.
+
+### v1.2 - Alpha Release
+- **Planned**: This version aims to enhance user experience and introduce advanced features.
+  - **Features**:
+    - Polished User Experience.
+    - Contract + Time integration to notify users about the nearing end of contract tenure.
+    - Advanced Querying and Data Visualization.
+  - **Timeline**: Expected release in 3 weeks.
+
 
 
    
