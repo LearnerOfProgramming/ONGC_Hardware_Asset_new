@@ -54,5 +54,7 @@ The MongoDB schema for this project is organized into the following models:
 2. Navigate to the project directory:
    ```bash
    cd ONGC_RACK_NEW
+3. cd backend && npm install
+
 
    
