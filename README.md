@@ -1,4 +1,4 @@
-# ONGC Rack Management System
+# ONGC Hardware Asset Management System
 
 ## Project Overview
 This project is designed to manage hardware assets and contracts within data centers. It allows admins to:
@@ -89,7 +89,7 @@ The MongoDB schema for this project is organized into the following models:
     - Database Optimizations.
     - End-to-end Contract Management.
     - Centralized, secure login system.
-  - **Timeline**: Expected release in 2 weeks.
+  - **Timeline**: Expected release in 2 weeks (as of 13-08-24).
 
 ### v1.2 - Alpha Release
 - **Planned**: This version aims to enhance user experience and introduce advanced features.
@@ -97,7 +97,7 @@ The MongoDB schema for this project is organized into the following models:
     - Polished User Experience.
     - Contract + Time integration to notify users about the nearing end of contract tenure.
     - Advanced Querying and Data Visualization.
-  - **Timeline**: Expected release in 3 weeks.
+  - **Timeline**: Expected release in 5 weeks (as of 13-08-24).
 
 
 
