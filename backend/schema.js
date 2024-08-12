@@ -8,11 +8,9 @@ const vendorSchema = new Schema({
     type: String,
     required: true
   },
-  vendorID: {
-    type: Array,
-    required: true,
-    unique: true,
-  }
+  email: { type: String, required: true },
+  mob: { type: String, required: true },
+  contracts : [{ type:Schema.Types.ObjectId}],
 });
 
 // DataCenter Schema
@@ -66,80 +64,23 @@ const customFieldSchema = new Schema({
 
 // Component Schema
 const componentSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  type: {
-    // Type of component: 1 - Server , 2 - Storage , 3 - Switch , 4 - Tape Drive , 5 - Others
-    type: Number,
-    required: true,
-    min: 1,
-    max: 5,
-  },
-
-  vendorId: {
-    type: Number,
-    required: true,
-  },
-
+  name: { type: String, required: true },
+  type: { type: Number, required: true, enum: [1, 2, 3, 4, 5] },
   specifications: {
-    serialNo: {
-      type: String,
-      required: true
-    },
-    ram: {
-      type: Number,
-
-    },
-    hdd: {
-      type: Number,
-
-    },
-    processor: {
-      type: String,
-
-    },
-    makeModel: {
-      type: String,
-      required: true
-    },
-
-    slots: {
-      type: Number
-    },
-
-    drives: {
-      type: Number
-    },
-
-    ports: {
-      type: Number,
-    },
-    vendorID: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Vendor'
-    }
+    serialNo: { type: String, required: true },
+    ram: Number,
+    hdd: Number,
+    processor: String,
+    makeModel: { type: String, required: true },
+    slots: Number,
+    drives: Number,
+    ports: Number,
+    contractNo: { type: Schema.Types.ObjectId, required: true, ref: 'Contract' },
   },
-  size: {
-    type: Number,
-    required: true
-  },
-  dataCenterId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: 'DataCenter'
-  },
-  rackId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: 'Rack'
-  },
-  startSlot: {
-    type: Number,
-    required: true
-  },
+  size: { type: Number, required: true },
+  dataCenterId: { type: Schema.Types.ObjectId, required: true, ref: 'DataCenter' },
+  rackId: { type: Schema.Types.ObjectId, required: true, ref: 'Rack' },
+  startSlot: { type: Number, required: true },
   customFields: [customFieldSchema]
 });
 
@@ -151,37 +92,24 @@ const componentSchema = new Schema({
 //   next();
 // });
 
-const assetSchema = new mongoose.Schema({
-  inventoryNo: { type: String, required: true },
+const assetSchema = new Schema({
+  inventoryNo: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   type: { type: String, required: true },
   description: { type: String, required: true },
-  contractId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: 'Contract'
-  }
+  contractId: { type: Schema.Types.ObjectId, ref: 'Contract', required: true },
+  component: { type: Schema.Types.ObjectId, ref: 'Component' }
 });
 
-const contractSchema = new mongoose.Schema({
-  contractorDetails: {
-    type: Schema.Types.ObjectId,
-    ref: 'Vendor'
-  },
-  contractNo: {
-    type: Number,
-    required:true
-  },
-  // contractNo. exists in vendorID, if new contract, then contractNo. is added to vendorID
-  assetIds: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Asset'
-  }],
+const contractSchema = new Schema({
+  contractorDetails: { type: Schema.Types.ObjectId, ref: 'Vendor', required: true },
+  contractNo: { type: String, required: true, unique: true },
+  assetIds: [{ type: Schema.Types.ObjectId, ref: 'Asset' }],
+  components: [{ type: Schema.Types.ObjectId, ref: 'Component' }],  // Added this field
   quantity: { type: Number, required: true },
-  email: { type: String, required: true },
-  mob: { type: String, required: true },
+  
   from: { type: Date, required: true },
-  to: { type: Date, required: true },
+  to: { type: Date, required: true }
 });
 
 const Asset = mongoose.model('Asset', assetSchema);

@@ -1,5 +1,4 @@
 import React from 'react';
-import './Table.css';
 import Badge from './Badge';
 
 export const TOTAL_SLOTS = 42;
@@ -56,10 +55,10 @@ const Table = ({ rack, name, onRefresh }) => {
   const rowsWithRowCount = combineRowsWithEmptySlots(sortedRack);
 
   return (
-    <table className="w-full table-fixed text-center bg-stone-200 shadow-lg rounded-md overflow-hidden -z-0">
+    <table className="w-full table-fixed text-center bg-gray-200 shadow-lg rounded-md overflow-hidden">
       <thead className="bg-gray-800 text-white">
         <tr>
-          <th className="py-4 px-6 text-2xl font-semibold">{name} Rack</th>
+          <th className="py-4 px-6 text-xl font-semibold">{name} Rack</th>
         </tr>
       </thead>
       <tbody>
@@ -68,10 +67,10 @@ const Table = ({ rack, name, onRefresh }) => {
           const rowHeight = `${rows * 3}rem`;
   
           return (
-            <tr key={groupIndex} className="border-b border-gray-200 hover:bg-zinc-200 transition-colors duration-200">
+            <tr key={groupIndex} className="border-b border-gray-300 hover:bg-gray-100 transition-colors duration-200">
               <td className="relative" style={{ height: rowHeight }}>
                 <div className="absolute inset-0 flex items-center">
-                  <span className="pl-2 absolute left-0 text-gray-600 font-medium select-none">
+                  <span className="absolute left-0 pl-2 text-gray-600 font-medium select-none">
                     {indexDisplay}.
                   </span>
                   <div className="ml-6 w-full flex justify-center items-center">
@@ -96,7 +95,7 @@ const Table = ({ rack, name, onRefresh }) => {
       </tbody>
       <tfoot className="bg-gray-800 text-white">
         <tr>
-          <th className="py-4 px-6 text-2xl font-semibold">{name} Rack</th>
+          <th className="py-4 px-6 text-xl font-semibold">{name} Rack</th>
         </tr>
       </tfoot>
     </table>

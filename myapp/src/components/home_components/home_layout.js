@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import Table from '../reusable/Table'
-import axios from "axios"
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import Table_New from '../reusable/Table';
+import ScrollButtons from '../reusable/ScrollButtons';
 
 const Layout = ({ dataCenter }) => {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [normalizedRacks, setNormalizedRacks] = useState({});
+    const [loading, setLoading] = useState(false); // State to track loading
 
     // Updated color mapping based on 'type' field
     const colorMapping = {
@@ -13,7 +15,6 @@ const Layout = ({ dataCenter }) => {
         3: "rgba(0, 128, 0, 0.7)",    // type 3 is for switches
         4: "rgba(255, 165, 0, 0.7)",  // type 4 is for tape drives
         5: "rgba(200, 165, 0, 0.7)",  // type 5 is for others
-
     };
 
     const getItemType = (item) => {
@@ -22,10 +23,10 @@ const Layout = ({ dataCenter }) => {
 
     useEffect(() => {
         async function fetchData() {
+            setLoading(true); // Start loading
             try {
                 const response = await axios.get(`/general/data-centers/${dataCenter}/components`);
                 const data = response.data;
-
 
                 const processedData = Object.entries(data).reduce((acc, [rackName, components]) => {
                     acc[rackName] = components.map(component => ({
@@ -37,16 +38,13 @@ const Layout = ({ dataCenter }) => {
                 setNormalizedRacks(processedData);
             } catch (error) {
                 console.error("Error fetching components:", error);
-                
+            } finally {
+                setLoading(false); // Stop loading
             }
         }
 
         fetchData();
     }, [dataCenter, refreshTrigger]);
-
-    if (Object.keys(normalizedRacks).length === 0) {
-        return <div className='p-4 text-xl font-bold'>Gathering Assets...</div>;
-    }
 
     const rackOrder = ['Server', 'Network1', 'Network2', 'Storage', 'Peripheral'];
 
@@ -55,15 +53,24 @@ const Layout = ({ dataCenter }) => {
     };
 
     return (
-        <div className='flex mx-2 mb-4 border-r rounded-md border-black'>
-            {rackOrder.map(rackName => {
-                if (normalizedRacks[rackName]) {
-                    return <Table key={rackName} rack={normalizedRacks[rackName]} name={rackName} onRefresh={handleRefresh}/>;
-                }
-                return null;
-            })}
+        <div className='relative'>
+            {/* Loading bar */}
+            {loading && <div className='absolute top-0 left-0 w-full h-1 bg-blue-500'></div>}
+            
+            {/* Page content */}
+            <div className='flex mx-2 mb-4 border-r rounded-md border-none mt-1'>
+                {rackOrder.map(rackName => (
+                    <Table_New 
+                        key={rackName} 
+                        rack={normalizedRacks[rackName] || []}  // Pass an empty array if no data
+                        name={rackName} 
+                        onRefresh={handleRefresh} 
+                    />
+                ))}
+            </div>
+            <ScrollButtons/>
         </div>
-    )
+    );
 }
 
-export default Layout
+export default Layout;
