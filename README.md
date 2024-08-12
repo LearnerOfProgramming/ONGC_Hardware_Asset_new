@@ -54,7 +54,23 @@ The MongoDB schema for this project is organized into the following models:
 2. Navigate to the project directory:
    ```bash
    cd ONGC_RACK_NEW
-3. cd backend && npm install
+3. Install backend dependencies:
+   ```bash
+   cd backend && npm install
+4. Install frontend dependencies:
+   ```bash
+   cd myapp && npm install
+5. Start the backend server:
+   ```bash
+   cd backend && node server.js
+6. Start the frontend server:
+   ```bash
+   npm run start
+
+Usage
+
+    Access the frontend at http://localhost:3000
+    Backend server runs on http://localhost:5000
 
 
    
