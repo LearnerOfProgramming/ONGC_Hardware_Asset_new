@@ -74,7 +74,7 @@ The MongoDB schema for this project is organized into the following models:
 
 ## Major Version Release Summary
 
-### v1.0 (Current)
+### v1.0 (Current - Alpha)
 - **First Prototype**: This version includes a complete end-to-end lifecycle of components.
   - **Features**:
     - New components can be added to a specific Data Center and Rack.
@@ -91,7 +91,7 @@ The MongoDB schema for this project is organized into the following models:
     - Centralized, secure login system.
   - **Timeline**: Expected release in 2 weeks (as of 13-08-24).
 
-### v1.2 - Alpha Release
+### v1.2 - Main Release
 - **Planned**: This version aims to enhance user experience and introduce advanced features.
   - **Features**:
     - Polished User Experience.
