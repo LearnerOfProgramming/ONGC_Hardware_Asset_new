@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { TOTAL_SLOTS } from '../reusable/Table';
+import io from 'socket.io-client';
 
 const initialComponentState = {
     type: '',
@@ -30,6 +31,9 @@ const componentTypes = {
 };
 
 const Layout_Admin = ({ dataCenter }) => {
+
+    const [logs, setLogs] = useState([]);
+    const [socket, setSocket] = useState(null);
     const [name, setName] = useState("");
     const [components, setComponents] = useState({});
     const [stats, setStats] = useState({});
@@ -104,6 +108,29 @@ const Layout_Admin = ({ dataCenter }) => {
     }, [dataCenter]);
 
     useEffect(() => {
+        // Initialize socket connection
+        const newSocket = io('http://localhost:5000');
+        setSocket(newSocket);
+
+        // Listen for initial logs
+        newSocket.on('initial_logs', (initialLogs) => {
+            setLogs(initialLogs);
+        });
+
+        // Listen for new log events
+        newSocket.on('new_log', (logMessage) => {
+            setLogs((prevLogs) => {
+                const updatedLogs = [...prevLogs, logMessage];
+                return updatedLogs.slice(-10); // Keep only the last 10 logs
+            });
+        });
+
+        // Clean up the socket connection on component unmount
+        return () => newSocket.disconnect();
+    }, []);
+
+
+    useEffect(() => {
         fetchComponents();
 
         switch (dataCenter) {
@@ -120,6 +147,9 @@ const Layout_Admin = ({ dataCenter }) => {
                 setName('Unknown Data Center');
                 break;
         }
+
+        
+
     }, [dataCenter, fetchComponents]); // TODO:Remove unnecessary dependencies
 
     useEffect(() => {
@@ -128,6 +158,19 @@ const Layout_Admin = ({ dataCenter }) => {
             setNewComponent(prev => ({ ...prev, vendorID: firstVendorID }));
         }
     }, [newComponent.vendor, selectedVendorIds]);
+
+    const renderLogs = () => (
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Session Logs (Last 10)</h2>
+            <ul className="space-y-2">
+                {logs.map((log, index) => (
+                    <li key={index} className="text-gray-700">
+                        <span className="font-semibold">{new Date(log.timestamp).toLocaleString()}</span>: {log.message}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 
     const calculateStats = useCallback((data) => {
         const stats = {
@@ -498,6 +541,7 @@ const Layout_Admin = ({ dataCenter }) => {
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">
                     Data Center Admin - {name}
                 </h1>
+                {renderLogs()}
 
                 <div className="bg-gray-50 shadow-lg rounded-xl p-6">
                     <h2 className="text-2xl font-semibold text-gray-700 mb-6">Statistics</h2>

@@ -20,8 +20,10 @@ router.post('/:dataCenterIndex/addcomponent', async (req, res) => {
             name: { $regex: new RegExp(req.body.rack, 'i') },
             dataCenterId: dataCenter._id
         });
-        const vendor = await Vendor.findOne({ vendorID: parseInt(req.body.vendor, 10) });
-        console.log(req.body.vendor)
+        console.log(req.body)
+        // console.log(parseInt(req.body.vendorID, 10))
+        const vendor = await Vendor.findOne({ vendorID: parseInt(req.body.vendorID, 10) });
+        console.log(vendor)
 
         if (!rack) {
             return res.status(404).json({ message: 'Rack not found' });
@@ -68,15 +70,18 @@ router.post('/:dataCenterIndex/addcomponent', async (req, res) => {
         const newComponent = new Component({
             type: req.body.type,
             name: req.body.name,
+            vendorId: vendor.vendorID[0],
             dataCenterId: rack.dataCenterId,
             rackId: rack._id,
             startSlot: req.body.startSlot,
             size: req.body.size,
             specifications: specifications,
             customFields: req.body.customFields,
+
         });
 
         await newComponent.save();
+        req.addLog(`New component added: ${newComponent.name}`);
         res.status(201).json(newComponent);
     } catch (err) {
         console.error("Error adding component:", err);
@@ -96,9 +101,9 @@ router.delete('/components/:id', async (req, res) => {
         }
 
         // Delete the component
+        req.addLog(`Component deleted: ${component.name}`);
         await Component.findByIdAndDelete(componentId);
         console.log("Successfully Deleted!")
-
         res.status(200).json({ message: 'Component deleted successfully' });
     } catch (error) {
         console.error('Error deleting component:', error);
